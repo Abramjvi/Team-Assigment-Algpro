@@ -25,7 +25,7 @@ Halo teman-teman kelompok! Proyek Praktikum 2 (ACCA 2) ini adalah **penilaian te
 | **Slot 1** | **Manajemen Katalog Buku**<br>Input buku baru (`BK001`), View buku tabular, Delete buku (index 1..n), Array shifting | Menu 1, 3, 5 | [`slot_1_katalog_buku.md`](./slot_1_katalog_buku.md) | Sedang (CRUD & Array) | `[ ] Open Slot` |
 | **Slot 2** | **Transaksi Penjualan & Union**<br>Input transaksi, hitung total, View history, Delete history, Integrasi `union PaymentDetail` | Menu 2, 4, 7 | [`slot_2_transaksi_union.md`](./slot_2_transaksi_union.md) | Sedang (Logika Bisnis & Union) | `[ ] Open Slot` |
 | **Slot 3** | **Algoritma Sorting Data Buku**<br>Bubble Sort Ascending (Nama) & Selection Sort Descending (Harga) + Validasi data kosong | Menu 8a & 8b | [`slot_3_sorting_buku.md`](./slot_3_sorting_buku.md) | **Ringan / Mandiri**<br>*(Self-Contained Algorithm)* | `[ ] Open Slot` |
-| **Slot 4** | **Core Engine, Memory & File Processing**<br>Dynamic memory (`malloc`/`realloc`/`free`), Persistensi `databuku.txt` & `history.txt`, Rekursi Omzet & Search | Week 6, 8, 9, Menu 6 | [`slot_4_core_memory_file.md`](./slot_4_core_memory_file.md) | **Tinggi (Arsitektur Inti)** | `[x] Chandra (Lead Core)` |
+| **Slot 4** | **Core Engine, Memory & File Processing**<br>Dynamic memory (`malloc`/`realloc`/`free`), Persistensi `databuku.txt` & `history.txt`, Rekursi Omzet & Search | Week 6, 8, 9, Menu 6 | [`slot_4_core_memory_file.md`](./slot_4_core_memory_file.md) | **Tinggi (Arsitektur Inti)** | `[x] Chandra` |
 | **Slot 5** | **Sistem Menu, Sanitasi & HAICOLA**<br>Console UI Main Menu loop, Helper sanitasi buffer keyboard (`clearInputBuffer`), Dokumentasi Konsultasi & Refleksi AI | Menu Utama, HAICOLA | [`slot_5_menu_sanitasi_haicola.md`](./slot_5_menu_sanitasi_haicola.md) | Sedang (Integrasi & Laporan) | `[ ] Open Slot` |
 
 ---
@@ -36,7 +36,7 @@ Halo teman-teman kelompok! Proyek Praktikum 2 (ACCA 2) ini adalah **penilaian te
    * Slot 3 hanya membutuhkan input berupa pointer array buku dan jumlah data: `(Book *arr, int n)`.
    * Fungsi sorting ini **sama sekali tidak menyentuh File I/O** dan fokus murni pada logika komparasi string (`strcmp`) dan pertukaran elemen (`swap`).
    * **Kemudahan Pengerjaan:** Modul ini sangat terisolasi sehingga anggota yang mengerjakannya bisa fokus 100% pada algoritma tanpa khawatir terganggu alur modul lain.
-2. **Kenapa Slot 4 Dipegang Chandra (Lead Core)?**
+2. **Kenapa Slot 4 Dipegang Chandra?**
    * Mengatur fondasi memori heap, pembacaan file dengan penanganan graceful NULL saat file belum ada, dan penulisan kembali saat exit.
    * Mengimplementasikan fungsi rekursif (Week 6) agar capaian silabus Binus terpenuhi 100%.
 3. **Bagaimana dengan Slot 1, 2, dan 5?**

@@ -1,5 +1,5 @@
 # 📕 Slot 4: Core Engine, Memory Allocation & File Persistence
-**PIC:** `[x] Chandra (Lead Core)`  
+**PIC:** `[x] Chandra`  
 **Tingkat Kesulitan:** **Tinggi (Fondasi Arsitektur Sistem, Pointer Heap & Rekursi)**  
 **Topik Silabus:** Week 6 (*Recursion*), Week 8 (*Dynamic Memory Allocation*), Week 9 (*File Processing & Searching*)  
 

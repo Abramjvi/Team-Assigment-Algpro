@@ -71,7 +71,7 @@ Untuk memastikan kolaborasi berjalan terstruktur, adil, modular, dan **bebas dar
 * 📘 [**Slot 1: Manajemen Katalog Buku (Menu 1, 3, 5)**](outline/slot_1_katalog_buku.md) $\to$ [`src/slot_1_katalog.c`](src/slot_1_katalog.c)
 * 📙 [**Slot 2: Transaksi Penjualan & Union (Menu 2, 4, 7)**](outline/slot_2_transaksi_union.md) $\to$ [`src/slot_2_transaksi.c`](src/slot_2_transaksi.c)
 * 📗 [**Slot 3: Algoritma Sorting Data Buku (Menu 8a & 8b)**](outline/slot_3_sorting_buku.md) $\to$ [`src/slot_3_sorting.c`](src/slot_3_sorting.c) *(Fokus Algoritma & Mandiri)*
-* 📕 [**Slot 4: Core Engine, File Persistence & Rekursi (Week 6, 9)**](outline/slot_4_core_memory_file.md) $\to$ [`src/slot_4_core.c`](src/slot_4_core.c) *(Lead Core)*
+* 📕 [**Slot 4: Core Engine, File Persistence & Rekursi (Week 6, 9)**](outline/slot_4_core_memory_file.md) $\to$ [`src/slot_4_core.c`](src/slot_4_core.c) *(Chandra)*
 * 📓 [**Slot 5: Sistem Menu, Sanitasi Buffer & Integrasi HAICOLA**](outline/slot_5_menu_sanitasi_haicola.md) $\to$ [`src/slot_5_ui.c`](src/slot_5_ui.c)
 * 🚀 **Master Entry Point:** [`src/main.c`](src/main.c) (Tinggal import fungsi dari file teman-teman)
 

@@ -1,7 +1,7 @@
 /**
  * ========================================================================================
  * SLOT 4: CORE ENGINE, FILE PERSISTENCE & RECURSIVE ALGORITHMS
- * PIC: Chandra (Lead Core)
+ * PIC: Chandra
  *
  * TUGAS UTAMA:
  * 1. Membaca dan menyimpan berkas teks "databuku.txt" dan "history.txt".
