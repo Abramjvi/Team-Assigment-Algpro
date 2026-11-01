@@ -63,16 +63,17 @@ Sistem yang dibangun adalah aplikasi konsol interaktif untuk toko buku skala men
 
 ---
 
-## 👥 Alur Kerja Tim & Pembagian Tugas (Outline)
+## 👥 Alur Kerja Tim & Pembagian Tugas (Outline & Modular Starter-Kit)
 
-Untuk memastikan kolaborasi berjalan terstruktur, adil, modular, dan tanpa konflik kode, seluruh panduan kerja serta spesifikasi per anggota tim dirangkum di dalam folder [`outline/`](outline/):
+Untuk memastikan kolaborasi berjalan terstruktur, adil, modular, dan **bebas dari git merge conflict**, proyek ini telah dipecah ke dalam modul file `.c` terpisah di folder [`src/`](src/) (tanpa file header `.h` yang membingungkan) dengan spesifikasi di [`outline/`](outline/):
 
 * 📋 [**Panduan Utama Outline Tim (`outline/README.md`)**](outline/README.md)
-* 📘 [**Slot 1: Manajemen Katalog Buku (Menu 1, 3, 5)**](outline/slot_1_katalog_buku.md)
-* 📙 [**Slot 2: Transaksi Penjualan & Union (Menu 2, 4, 7)**](outline/slot_2_transaksi_union.md)
-* 📗 [**Slot 3: Algoritma Sorting Data Buku (Menu 8a & 8b)**](outline/slot_3_sorting_buku.md) *(Modular & Self-Contained)*
-* 📕 [**Slot 4: Core Engine, Memory Allocation & File Persistence (Week 6, 8, 9)**](outline/slot_4_core_memory_file.md) *(Deep Technical Core)*
-* 📓 [**Slot 5: Sistem Menu, Sanitasi Buffer & Integrasi HAICOLA (Menu 6, UI, Refleksi AI)**](outline/slot_5_menu_sanitasi_haicola.md)
+* 📘 [**Slot 1: Manajemen Katalog Buku (Menu 1, 3, 5)**](outline/slot_1_katalog_buku.md) $\to$ [`src/slot_1_katalog.c`](src/slot_1_katalog.c)
+* 📙 [**Slot 2: Transaksi Penjualan & Union (Menu 2, 4, 7)**](outline/slot_2_transaksi_union.md) $\to$ [`src/slot_2_transaksi.c`](src/slot_2_transaksi.c)
+* 📗 [**Slot 3: Algoritma Sorting Data Buku (Menu 8a & 8b)**](outline/slot_3_sorting_buku.md) $\to$ [`src/slot_3_sorting.c`](src/slot_3_sorting.c) *(Fokus Algoritma & Mandiri)*
+* 📕 [**Slot 4: Core Engine, File Persistence & Rekursi (Week 6, 9)**](outline/slot_4_core_memory_file.md) $\to$ [`src/slot_4_core.c`](src/slot_4_core.c) *(Lead Core)*
+* 📓 [**Slot 5: Sistem Menu, Sanitasi Buffer & Integrasi HAICOLA**](outline/slot_5_menu_sanitasi_haicola.md) $\to$ [`src/slot_5_ui.c`](src/slot_5_ui.c)
+* 🚀 **Master Entry Point:** [`src/main.c`](src/main.c) (Tinggal import fungsi dari file teman-teman)
 
 ---
 
@@ -80,17 +81,17 @@ Untuk memastikan kolaborasi berjalan terstruktur, adil, modular, dan tanpa konfl
 
 Program ditulis murni menggunakan **Standar C (C99 / C11)** tanpa dependensi pustaka luar pihak ketiga.
 
-### Menggunakan GCC / MinGW:
+### 1. Kompilasi Langsung File `main.c` (GCC / MinGW):
+Masuk ke folder `ACCA 2/` atau root repo, lalu cukup kompilasi file `main.c`:
 ```bash
-# Kompilasi dengan wall flag untuk memastikan bebas warning
-gcc -std=c99 -Wall -Wextra -O2 algo_project.c -o algo_project.exe
+# Kompilasi berkas utama (otomatis menyertakan file modul lainnya)
+gcc -std=c99 -Wall -Wextra src/main.c -o algo_project.exe
 
 # Menjalankan aplikasi
 ./algo_project.exe
 ```
 
-### Menggunakan Clang:
-```bash
-clang -std=c99 -Wall algo_project.c -o algo_project
-./algo_project
-```
+### 2. Kompilasi via CLion / CMake:
+Target `TugasACCA2` sudah otomatis terdaftar di `CMakeLists.txt`. Cukup pilih profil `TugasACCA2` lalu tekan tombol **Run (Shift + F10)**.
+
+

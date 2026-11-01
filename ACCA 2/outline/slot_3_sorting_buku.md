@@ -1,5 +1,5 @@
 # 📗 Slot 3: Algoritma Sorting Data Buku (Menu 8a & 8b)
-**PIC:** `[ ] Open Slot` *(AFK-Friendly / Modular Slot)*  
+**PIC:** `[ ] Open Slot` *(Fokus Algoritma Murni & Modular)*  
 **Tingkat Kesulitan:** **Ringan / Sangat Mandiri (Self-Contained Algorithm)**  
 **Bobot Nilai Soal:** 15% (Menu 8: Fitur Praktikum Tambahan)  
 
