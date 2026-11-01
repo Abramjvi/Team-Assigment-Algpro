@@ -22,6 +22,6 @@ add_executable(TugasDCCA3_Hanoi "DCCA 3/src/hanoi.c")
 add_executable(TugasDCCA3_Factorial "DCCA 3/src/factorial.c")
 add_executable(TugasDCCA3_SearchSiswa "DCCA 3/answer/search_siswa.c")
 
-
-
+# ACCA 2 (Week 10 - Proyek Praktikum 2)
+add_executable(TugasACCA2 "ACCA 2/src/main.c")
 
