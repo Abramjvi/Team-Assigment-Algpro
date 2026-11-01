@@ -1,47 +1,14 @@
-/**
- * ========================================================================================
- * SLOT 4: CORE ENGINE, FILE PERSISTENCE & RECURSIVE ALGORITHMS
- * PIC: Chandra
- *
- * MATA KULIAH    : ALGORITHM AND PROGRAMMING (COMP6112036)
- * TOPIK SILABUS  : WEEK 6 (FUNCTION & RECURSION), WEEK 9 (FILE PROCESSING & SEARCHING)
- *
- * CAKUPAN TUGAS SLOT 4:
- * 1. Manajemen Berkas Teks (File I/O):
- *    - loadBooksFromFile     : Membaca berkas "databuku.txt" dengan penanganan cold-start.
- *    - saveBooksToFile       : Menyimpan seluruh katalog buku ke "databuku.txt" saat Exit (Menu 6).
- *    - loadHistoryFromFile   : Membaca berkas "history.txt" saat program dijalankan.
- *    - appendTransactionToFile : Menambahkan transaksi baru seketika ke "history.txt" (Menu 7).
- *    - saveAllHistoryToFile  : Menulis ulang riwayat saat ada histori dihapus (Menu 4 / Menu 6).
- *
- * 2. Algoritma Rekursif (Week 6 Compliance):
- *    - calculateTotalRevenueRecursive : Akumulasi omzet kumulatif toko via call stack.
- *    - searchBookByCodeRecursive      : Pencarian kode buku rekursif untuk verifikasi transaksi.
- * ========================================================================================
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-/**
- * ========================================================================================
- * 1. PEMROSESAN BERKAS KATALOG BUKU ("databuku.txt")
- * ========================================================================================
- */
+// Slot 4: File I/O & Rekursif
+// PIC: Chandra
 
-/**
- * Membaca data buku dari berkas teks saat program pertama kali dibuka.
- * 
- * INVARIAN PENTING DARI DOSEN:
- * Berkas databuku.txt TIDAK DISEDIAKAN di awal oleh dosen.
- * Jika file belum ada (fp == NULL), program TIDAK BOLEH CRASH/EXIT!
- * Cukup inisialisasi jumlah buku (*count = 0) dan kembali secara aman (graceful fallback).
- */
+// Membaca databuku.txt. Jika file belum ada, set count = 0
 void loadBooksFromFile(const char *filename, Book books[], int *count) {
     FILE *fp = fopen(filename, "r");
     if (fp == NULL) {
-        // Kondisi Cold-Start: File belum terbentuk di disk
         *count = 0;
         return;
     }
@@ -49,20 +16,15 @@ void loadBooksFromFile(const char *filename, Book books[], int *count) {
     char line[256];
     *count = 0;
 
-    // Membaca baris demi baris hingga akhir berkas (EOF)
     while (fgets(line, sizeof(line), fp) != NULL) {
-        // Hapus karakter newline '\r' atau '\n' di ujung baris
         line[strcspn(line, "\r\n")] = '\0';
-
-        // Lewati baris kosong
         if (strlen(line) == 0) {
             continue;
         }
 
         Book *b = &books[*count];
 
-        // Format baris: KodeBuku|NamaBuku|JenisBuku|HargaBuku
-        // Menggunakan strtok dengan delimiter pipa '|' agar nama ber-spasi tetap utuh
+        // Format: KodeBuku|NamaBuku|JenisBuku|HargaBuku
         char *token = strtok(line, "|");
         if (token != NULL) {
             strncpy(b->bookCode, token, sizeof(b->bookCode) - 1);
@@ -92,10 +54,7 @@ void loadBooksFromFile(const char *filename, Book books[], int *count) {
     fclose(fp);
 }
 
-/**
- * Menyimpan seluruh data buku aktif ke berkas teks saat Menu 6 (Exit).
- * Format penyimpanan seragam menggunakan delimiter pipa '|'.
- */
+// Simpan semua data buku ke file (dipanggil saat Exit)
 void saveBooksToFile(const char *filename, const Book books[], int count) {
     FILE *fp = fopen(filename, "w");
     if (fp == NULL) {
@@ -114,20 +73,10 @@ void saveBooksToFile(const char *filename, const Book books[], int count) {
     fclose(fp);
 }
 
-/**
- * ========================================================================================
- * 2. PEMROSESAN BERKAS RIWAYAT PENJUALAN ("history.txt")
- * ========================================================================================
- */
-
-/**
- * Membaca seluruh histori transaksi penjualan dari berkas teks.
- * Jika file belum ada, inisialisasi histori kosong (*count = 0).
- */
+// Membaca riwayat transaksi dari history.txt
 void loadHistoryFromFile(const char *filename, TransactionHistory histories[], int *count) {
     FILE *fp = fopen(filename, "r");
     if (fp == NULL) {
-        // Kondisi Cold-Start: File history.txt belum ada
         *count = 0;
         return;
     }
@@ -183,10 +132,7 @@ void loadHistoryFromFile(const char *filename, TransactionHistory histories[], i
     fclose(fp);
 }
 
-/**
- * Menambahkan (append) satu data transaksi baru ke berkas history.txt.
- * Dipanggil langsung saat transaksi berhasil dicatat di Menu 7.
- */
+// Tambah 1 transaksi baru ke akhir history.txt (dipanggil saat transaksi selesai)
 void appendTransactionToFile(const char *filename, const TransactionHistory *trans) {
     FILE *fp = fopen(filename, "a");
     if (fp == NULL) {
@@ -213,10 +159,7 @@ void appendTransactionToFile(const char *filename, const TransactionHistory *tra
     fclose(fp);
 }
 
-/**
- * Menulis ulang seluruh data riwayat penjualan ke berkas history.txt.
- * Dipanggil saat terjadi penghapusan histori (Menu 4) atau saat keluar aplikasi (Menu 6).
- */
+// Tulis ulang seluruh histori transaksi (setelah hapus riwayat / saat exit)
 void saveAllHistoryToFile(const char *filename, const TransactionHistory histories[], int count) {
     FILE *fp = fopen(filename, "w");
     if (fp == NULL) {
@@ -245,50 +188,26 @@ void saveAllHistoryToFile(const char *filename, const TransactionHistory histori
     fclose(fp);
 }
 
-/**
- * ========================================================================================
- * 3. ALGORITMA REKURSIF (WEEK 6: FUNCTION & RECURSION)
- * ========================================================================================
- */
-
-/**
- * Menghitung akumulasi total omzet pendapatan seluruh riwayat transaksi secara rekursif.
- * 
- * KONSEP REKURSI:
- * - Base Case    : Jika n <= 0 (tidak ada data transaksi tersisa), kembalikan 0.0.
- * - Recursive Step: Ambil total harga transaksi elemen terakhir (histories[n - 1].totalPrice),
- *                   lalu jumlahkan dengan hasil pemanggilan fungsi ini untuk n - 1 elemen sebelumnya.
- */
+// Hitung total omzet transaksi secara rekursif
 double calculateTotalRevenueRecursive(const TransactionHistory histories[], int n) {
-    // Base Case: Tidak ada elemen untuk dihitung
     if (n <= 0) {
-        return 0.0;
+        return 0.0; // Base case: tidak ada transaksi
     }
 
-    // Recursive Call: Elemen ke-(n-1) + akumulasi (n-1) elemen pertama
+    // Rekursif: transaksi ke-(n-1) + total sisa transaksi sebelumnya
     return histories[n - 1].totalPrice + calculateTotalRevenueRecursive(histories, n - 1);
 }
 
-/**
- * Mencari indeks buku di dalam katalog berdasarkan kode buku secara rekursif.
- * Dipanggil oleh Slot 2 saat kasir memasukkan kode buku untuk mendapatkan harga satuan.
- * 
- * KONSEP REKURSI:
- * - Base Case 1   : currentIndex >= totalBooks -> traversal selesai dan kode tidak ditemukan (-1).
- * - Base Case 2   : strcmp cocok (0) -> kode buku ditemukan, kembalikan currentIndex.
- * - Recursive Step : Lanjut periksa indeks berikutnya (currentIndex + 1).
- */
+// Cari indeks buku berdasarkan kode secara rekursif
 int searchBookByCodeRecursive(const Book books[], int currentIndex, int totalBooks, const char *targetCode) {
-    // Base Case 1: Traversal mencapai batas tanpa menemukan kecocokan
     if (currentIndex >= totalBooks) {
-        return -1;
+        return -1; // Base case: buku tidak ditemukan
     }
 
-    // Base Case 2: Kode buku cocok ditemukan
     if (strcmp(books[currentIndex].bookCode, targetCode) == 0) {
-        return currentIndex;
+        return currentIndex; // Base case: buku ketemu
     }
 
-    // Recursive Step: Cek elemen berikutnya
+    // Rekursif: cek ke indeks berikutnya
     return searchBookByCodeRecursive(books, currentIndex + 1, totalBooks, targetCode);
 }
