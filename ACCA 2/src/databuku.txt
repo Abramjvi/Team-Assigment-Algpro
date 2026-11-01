@@ -1,0 +1,5 @@
+BK001|Dasar Pemrograman C|Komputer|85000.00
+BK002|Struktur Data & Algoritma|Komputer|120000.00
+BK003|Laskar Pelangi|Novel Fiksi|75000.00
+BK004|Fisika Kuantum Populer|Sains|95000.00
+BK005|Filosofi Teras|Pengembangan Diri|98000.00

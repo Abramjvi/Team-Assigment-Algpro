@@ -1,146 +1,213 @@
-/**
- * ========================================================================================
- * SLOT 4: CORE ENGINE, FILE PERSISTENCE & RECURSIVE ALGORITHMS
- * PIC: Chandra
- *
- * PANDUAN PENGERJAAN UNTUK ANGGOTA TIM:
- * Modul ini bertugas menangani pembacaan/penyimpanan berkas serta algoritma rekursif.
- * Silakan lengkapi logika fungsi di bawah ini sesuai petunjuk TODO masing-masing.
- * ========================================================================================
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-/**
- * 1. MEMBACA DATA BUKU DARI FILE TEKS (WEEK 9: FILE PROCESSING)
- * 
- * TODO YANG HARUS ANDA KERJAKAN:
- * 1. Buka berkas dengan mode read: FILE *fp = fopen(filename, "r");
- * 2. Tangani kondisi cold-start (jika file belum ada / fp == NULL):
- *    Jangan crash! Cukup inisialisasi *count = 0 dan return.
- * 3. Jika file ada, baca baris demi baris menggunakan fgets().
- * 4. Parse setiap baris berformat pipe-delimited: Kode|Nama|Jenis|Harga
- *    (Tips: gunakan strtok atau sscanf).
- * 5. Masukkan ke dalam array books[*count] dan naikkan (*count)++.
- * 6. Tutup file dengan fclose(fp).
- */
+// Slot 4: File I/O & Rekursif
+// PIC: Chandra
+
+// Membaca databuku.txt. Jika file belum ada, set count = 0
 void loadBooksFromFile(const char *filename, Book books[], int *count) {
-    (void)filename;
-    (void)books;
-    *count = 0; // Default inisialisasi katalog kosong
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL) {
+        *count = 0;
+        return;
+    }
 
-    // TODO: Tulis kodingan pembacaan file databuku.txt di sini...
+    char line[256];
+    *count = 0;
+
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        line[strcspn(line, "\r\n")] = '\0';
+        if (strlen(line) == 0) {
+            continue;
+        }
+
+        Book *b = &books[*count];
+
+        // Format: KodeBuku|NamaBuku|JenisBuku|HargaBuku
+        char *token = strtok(line, "|");
+        if (token != NULL) {
+            strncpy(b->bookCode, token, sizeof(b->bookCode) - 1);
+            b->bookCode[sizeof(b->bookCode) - 1] = '\0';
+        }
+
+        token = strtok(NULL, "|");
+        if (token != NULL) {
+            strncpy(b->title, token, sizeof(b->title) - 1);
+            b->title[sizeof(b->title) - 1] = '\0';
+        }
+
+        token = strtok(NULL, "|");
+        if (token != NULL) {
+            strncpy(b->category, token, sizeof(b->category) - 1);
+            b->category[sizeof(b->category) - 1] = '\0';
+        }
+
+        token = strtok(NULL, "|");
+        if (token != NULL) {
+            b->price = atof(token);
+        }
+
+        (*count)++;
+    }
+
+    fclose(fp);
 }
 
-/**
- * 2. MENYIMPAN DATA BUKU KE FILE TEKS (MENU 6: EXIT)
- * 
- * TODO YANG HARUS ANDA KERJAKAN:
- * 1. Buka berkas dengan mode write: FILE *fp = fopen(filename, "w");
- * 2. Lakukan looping dari i = 0 sampai count - 1.
- * 3. Tulis data ke file dengan format: fprintf(fp, "%s|%s|%s|%.2f\n", ...);
- * 4. Tutup berkas dengan fclose(fp).
- */
+// Simpan semua data buku ke file (dipanggil saat Exit)
 void saveBooksToFile(const char *filename, const Book books[], int count) {
-    (void)filename;
-    (void)books;
-    (void)count;
+    FILE *fp = fopen(filename, "w");
+    if (fp == NULL) {
+        fprintf(stderr, "[ERROR] Gagal membuka '%s' untuk penulisan data buku!\n", filename);
+        return;
+    }
 
-    // TODO: Tulis kodingan penulisan file databuku.txt di sini...
+    for (int i = 0; i < count; i++) {
+        fprintf(fp, "%s|%s|%s|%.2f\n", 
+                books[i].bookCode, 
+                books[i].title, 
+                books[i].category, 
+                books[i].price);
+    }
+
+    fclose(fp);
 }
 
-/**
- * 3. MEMBACA RIWAYAT TRANSAKSI DARI FILE TEKS (WEEK 9: FILE PROCESSING)
- * 
- * TODO YANG HARUS ANDA KERJAKAN:
- * 1. Buka berkas dengan mode read: FILE *fp = fopen(filename, "r");
- * 2. Tangani kondisi jika file belum ada (fp == NULL): set *count = 0 dan return.
- * 3. Baca baris demi baris dengan fgets().
- * 4. Parse baris berformat: Kode|Qty|TotalHarga|PayType|Detail
- * 5. Simpan ke array histories[*count] dan naikkan (*count)++.
- * 6. Tutup file dengan fclose(fp).
- */
+// Membaca riwayat transaksi dari history.txt
 void loadHistoryFromFile(const char *filename, TransactionHistory histories[], int *count) {
-    (void)filename;
-    (void)histories;
-    *count = 0; // Default inisialisasi riwayat kosong
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL) {
+        *count = 0;
+        return;
+    }
 
-    // TODO: Tulis kodingan pembacaan file history.txt di sini...
+    char line[256];
+    *count = 0;
+
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        line[strcspn(line, "\r\n")] = '\0';
+        if (strlen(line) == 0) {
+            continue;
+        }
+
+        TransactionHistory *h = &histories[*count];
+
+        // Format: KodeBuku|JumlahTerjual|TotalHarga|MetodeBayar|Detail
+        char *token = strtok(line, "|");
+        if (token != NULL) {
+            strncpy(h->bookCode, token, sizeof(h->bookCode) - 1);
+            h->bookCode[sizeof(h->bookCode) - 1] = '\0';
+        }
+
+        token = strtok(NULL, "|");
+        if (token != NULL) {
+            h->quantity = atoi(token);
+        }
+
+        token = strtok(NULL, "|");
+        if (token != NULL) {
+            h->totalPrice = atof(token);
+        }
+
+        token = strtok(NULL, "|");
+        if (token != NULL) {
+            h->payType = (PaymentType)atoi(token);
+        } else {
+            h->payType = PAYMENT_CASH;
+        }
+
+        token = strtok(NULL, "|");
+        if (token != NULL) {
+            if (h->payType == PAYMENT_CASH) {
+                h->detail.cashReceived = atof(token);
+            } else {
+                strncpy(h->detail.transactionRef, token, sizeof(h->detail.transactionRef) - 1);
+                h->detail.transactionRef[sizeof(h->detail.transactionRef) - 1] = '\0';
+            }
+        }
+
+        (*count)++;
+    }
+
+    fclose(fp);
 }
 
-/**
- * 4. MENAMBAHKAN SATU TRANSAKSI BARU KE FILE (MENU 7: APPEND MODE)
- * 
- * TODO YANG HARUS ANDA KERJAKAN:
- * 1. Buka berkas dengan mode append: FILE *fp = fopen(filename, "a");
- * 2. Tulis baris transaksi baru sesuai format.
- * 3. Tutup berkas dengan fclose(fp).
- */
+// Tambah 1 transaksi baru ke akhir history.txt (dipanggil saat transaksi selesai)
 void appendTransactionToFile(const char *filename, const TransactionHistory *trans) {
-    (void)filename;
-    (void)trans;
+    FILE *fp = fopen(filename, "a");
+    if (fp == NULL) {
+        fprintf(stderr, "[ERROR] Gagal membuka '%s' untuk pencatatan transaksi!\n", filename);
+        return;
+    }
 
-    // TODO: Tulis kodingan append transaksi ke history.txt di sini...
+    if (trans->payType == PAYMENT_CASH) {
+        fprintf(fp, "%s|%d|%.2f|%d|%.2f\n", 
+                trans->bookCode, 
+                trans->quantity, 
+                trans->totalPrice, 
+                trans->payType, 
+                trans->detail.cashReceived);
+    } else {
+        fprintf(fp, "%s|%d|%.2f|%d|%s\n", 
+                trans->bookCode, 
+                trans->quantity, 
+                trans->totalPrice, 
+                trans->payType, 
+                trans->detail.transactionRef);
+    }
+
+    fclose(fp);
 }
 
-/**
- * 5. MENULIS ULANG SELURUH RIWAYAT TRANSAKSI (MENU 4 / MENU 6)
- * 
- * TODO YANG HARUS ANDA KERJAKAN:
- * 1. Buka berkas dengan mode write ("w") untuk menimpa file lama.
- * 2. Lakukan looping seluruh data di array histories dan tulis ke file.
- * 3. Tutup berkas dengan fclose(fp).
- */
+// Tulis ulang seluruh histori transaksi (setelah hapus riwayat / saat exit)
 void saveAllHistoryToFile(const char *filename, const TransactionHistory histories[], int count) {
-    (void)filename;
-    (void)histories;
-    (void)count;
+    FILE *fp = fopen(filename, "w");
+    if (fp == NULL) {
+        fprintf(stderr, "[ERROR] Gagal membuka '%s' untuk penulisan ulang riwayat!\n", filename);
+        return;
+    }
 
-    // TODO: Tulis kodingan penulisan ulang file history.txt di sini...
+    for (int i = 0; i < count; i++) {
+        if (histories[i].payType == PAYMENT_CASH) {
+            fprintf(fp, "%s|%d|%.2f|%d|%.2f\n", 
+                    histories[i].bookCode, 
+                    histories[i].quantity, 
+                    histories[i].totalPrice, 
+                    histories[i].payType, 
+                    histories[i].detail.cashReceived);
+        } else {
+            fprintf(fp, "%s|%d|%.2f|%d|%s\n", 
+                    histories[i].bookCode, 
+                    histories[i].quantity, 
+                    histories[i].totalPrice, 
+                    histories[i].payType, 
+                    histories[i].detail.transactionRef);
+        }
+    }
+
+    fclose(fp);
 }
 
-/**
- * 6. FUNGSI REKURSIF: MENGHITUNG TOTAL OMZET PENJUALAN (WEEK 6)
- * 
- * TODO YANG HARUS ANDA KERJAKAN:
- * 1. Base Case: Jika tidak ada transaksi tersisa (n <= 0), kembalikan 0.0.
- * 2. Recursive Step: Jumlahkan totalPrice elemen terakhir (histories[n - 1].totalPrice)
- *    dengan pemanggilan rekursif untuk n - 1 elemen sebelumnya.
- */
+// Hitung total omzet transaksi secara rekursif
 double calculateTotalRevenueRecursive(const TransactionHistory histories[], int n) {
-    (void)histories;
-    (void)n;
-
-    // Base Case default:
     if (n <= 0) {
-        return 0.0;
+        return 0.0; // Base case: tidak ada transaksi
     }
 
-    // TODO: Tulis langkah rekursif di sini...
-    return 0.0;
+    // Rekursif: transaksi ke-(n-1) + total sisa transaksi sebelumnya
+    return histories[n - 1].totalPrice + calculateTotalRevenueRecursive(histories, n - 1);
 }
 
-/**
- * 7. FUNGSI REKURSIF: MENCARI BUKU BERDASARKAN KODE (WEEK 6 & WEEK 9)
- * 
- * TODO YANG HARUS ANDA KERJAKAN:
- * 1. Base Case 1: Jika currentIndex >= totalBooks, buku tidak ditemukan -> return -1.
- * 2. Base Case 2: Jika strcmp(books[currentIndex].bookCode, targetCode) == 0 -> return currentIndex.
- * 3. Recursive Step: Periksa indeks berikutnya -> searchBookByCodeRecursive(books, currentIndex + 1, totalBooks, targetCode).
- */
+// Cari indeks buku berdasarkan kode secara rekursif
 int searchBookByCodeRecursive(const Book books[], int currentIndex, int totalBooks, const char *targetCode) {
-    (void)books;
-    (void)currentIndex;
-    (void)totalBooks;
-    (void)targetCode;
-
-    // Base Case default:
     if (currentIndex >= totalBooks) {
-        return -1;
+        return -1; // Base case: buku tidak ditemukan
     }
 
-    // TODO: Tulis langkah perbandingan string dan panggilan rekursif di sini...
-    return -1;
+    if (strcmp(books[currentIndex].bookCode, targetCode) == 0) {
+        return currentIndex; // Base case: buku ketemu
+    }
+
+    // Rekursif: cek ke indeks berikutnya
+    return searchBookByCodeRecursive(books, currentIndex + 1, totalBooks, targetCode);
 }
